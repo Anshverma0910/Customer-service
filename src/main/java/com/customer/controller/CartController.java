@@ -38,10 +38,6 @@ public class CartController {
         return cartService.createCart(userId,productId);
     }
 
-
-
-
-
     @GetMapping("/{cartId}/placeOrder")
     public ResponseEntity<Object> placeOrder(@PathVariable("cartId") int cartId)
     {

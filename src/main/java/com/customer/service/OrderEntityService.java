@@ -6,6 +6,7 @@ import com.customer.entity.OrderEntity;
 import com.customer.entity.ProductQuantity;
 import com.customer.repository.CustomerRepository;
 import com.customer.repository.OrderEntityRepository;
+import com.customer.serviceinterface.OrderEntityServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 @Service
-public class OrderEntityService {
+public class OrderEntityService implements OrderEntityServiceInterface {
 
     @Autowired
     private OrderEntityRepository orderEntityRepository;
@@ -30,11 +31,12 @@ public class OrderEntityService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Override
     public List<OrderEntity> getAll(){
         return orderEntityRepository.findAll();
     }
 
-
+    @Override
     public ResponseEntity<Object> placeOrder(int cartId){
 
         OrderEntity orderEntity = new OrderEntity();

@@ -2,6 +2,7 @@ package com.customer.service;
 
 import com.customer.entity.ProductQuantity;
 import com.customer.repository.ProductQuantityRepository;
+import com.customer.serviceinterface.ProductQuantityServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductQuantityService {
+public class ProductQuantityService implements ProductQuantityServiceInterface {
 
     @Autowired
     private ProductQuantityRepository productQuantityRepository;
@@ -17,7 +18,6 @@ public class ProductQuantityService {
     public List<ProductQuantity> getAll(){
         return productQuantityRepository.findAll();
     }
-
 
     public ProductQuantity add(int cartId,int productId){
         ProductQuantity productQuantity = productQuantityRepository.

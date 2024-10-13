@@ -6,6 +6,7 @@ import com.customer.exception.Cart.CartNotFoundException;
 import com.customer.exception.product.ProductNotFoundException;
 import com.customer.repository.CartRepository;
 import com.customer.repository.ProductQuantityRepository;
+import com.customer.serviceinterface.CartserviceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class CartService {
+public class CartService implements CartserviceInterface {
 
     @Autowired
     private CartRepository cartRepository;
@@ -29,17 +30,20 @@ public class CartService {
     private RestTemplate restTemplate;
 
 
+    @Override
     public List<Cart> getAll(){
         return cartRepository.findAll();
     }
 
 
+    @Override
     public Cart getById(int id){
         Optional<Cart> cart = cartRepository.findById(id);
         if(cart.isEmpty()) return new Cart();
         return cartRepository.findById(id).get();
     }
 
+    @Override
     public int calcAmount(List<ProductQuantity> list){
         int sum=0;
         System.out.println("Third ... First..............................");
@@ -60,6 +64,7 @@ public class CartService {
     }
 
 
+    @Override
     public ResponseEntity<Object> createCart(int userId, int productId)
     {
         System.out.println("Fisrt...................");
@@ -78,6 +83,7 @@ public class CartService {
         return new ResponseEntity<>("Product added into your cart successfully...", HttpStatus.OK);
     }
 
+    @Override
     public Object getCoupons()
     {
         String url="http://localhost:8080/coupon/view";
@@ -85,6 +91,7 @@ public class CartService {
         return List.of(couponsArray);
     }
 
+    @Override
     public ResponseEntity<Object> applyCoupon(int cartId, String couponName)
     {
         Optional<Cart> cart =cartRepository.findById(cartId);
@@ -112,6 +119,7 @@ public class CartService {
         return new ResponseEntity<>("Congratulations! coupon Applied...",HttpStatus.NOT_FOUND);
     }
 
+    @Override
     public int afterCoupon(int amount, int percent){
         int discount = (percent*amount)/100;
         return amount-discount;
