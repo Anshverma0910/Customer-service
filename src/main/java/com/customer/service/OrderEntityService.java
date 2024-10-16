@@ -4,6 +4,7 @@ import com.customer.entity.Cart;
 import com.customer.entity.Customer;
 import com.customer.entity.OrderEntity;
 import com.customer.entity.ProductQuantity;
+import com.customer.repository.CartRepository;
 import com.customer.repository.CustomerRepository;
 import com.customer.repository.OrderEntityRepository;
 import com.customer.serviceinterface.OrderEntityServiceInterface;
@@ -12,10 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 @Service
 public class OrderEntityService implements OrderEntityServiceInterface {
 
@@ -31,9 +30,15 @@ public class OrderEntityService implements OrderEntityServiceInterface {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private CartRepository cartRepository;
+
     @Override
     public List<OrderEntity> getAll(){
-        return orderEntityRepository.findAll();
+        List<OrderEntity> all = orderEntityRepository.findAll();
+
+        System.out.println("@@@@@@@@@@@@@@@"+all);
+        return all;
     }
 
     @Override
@@ -46,14 +51,35 @@ public class OrderEntityService implements OrderEntityServiceInterface {
         List<Cart> list = new ArrayList<>();
         System.out.println("...."+cartService.getById(cartId));
         list.add(cartService.getById(cartId));
+        System.out.println(cartService.getById(cartId)+"jddgqwudgqdwqud");
         orderEntity.setMycart(list);
         orderEntity.setCustomerId(cartId);
-        orderEntityRepository.save(orderEntity);
-        System.out.println(orderEntity.toString());
+        System.out.println(orderEntity.getMycart()+"------------------");
+        System.out.println("fjcvbk.........."+orderEntity.toString());
 
+        OrderEntity newObject = orderEntityRepository.save(orderEntity);
+        System.out.println("hello brother...........................edfveav");
+        int index = newObject.getOrderEntityId();
+        System.out.println("id is ........................"+index);
+
+        System.out.println("...........before...........");
+        Optional<Cart> cart = cartRepository.findById(cartId);
+        System.out.println(".............after............");
+        System.out.println("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq"+cart.get());
+        cart.get().setOrderEntityId(index);
+        System.out.println("////////////////////////////////////");
+
+        System.out.println("llllllllllllllllllllllllllllllllll"+cart.get());
+        cartRepository.save(cart.get());
+
+
+
+        System.out.println(".....................................");
+        System.out.println(orderEntity.toString());
 
         Customer customer = customerService.getDetails(cartId);
         List<OrderEntity> newList = customer.getCustomerOrder();
+
 
         System.out.println("my customer order list...."+newList);
         newList.add(orderEntity);

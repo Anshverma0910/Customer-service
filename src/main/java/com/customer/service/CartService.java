@@ -116,7 +116,7 @@ public class CartService implements CartserviceInterface {
         cart.get().setCartAmount(amount);
         System.out.println(cart.get().toString());
         cartRepository.save(cart.get());
-        return new ResponseEntity<>("Congratulations! coupon Applied...",HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Congratulations! coupon Applied...",HttpStatus.ACCEPTED);
     }
 
     @Override
@@ -124,5 +124,4 @@ public class CartService implements CartserviceInterface {
         int discount = (percent*amount)/100;
         return amount-discount;
     }
-
 }
